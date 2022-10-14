@@ -5,6 +5,7 @@
     "serve": "vite preview",
     "build": "vite build",
     "dev": "vite",
+    "start": "vite",
     "preview": "vite preview --port 4173"
   },
   "dependencies": {

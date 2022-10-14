@@ -97,16 +97,16 @@ import Result from './Result.vue'
         // ]
 
         // another matrix
-        baris.value = 4;
-        kolom.value = 6;
-        setTimeout(()=>{
-          matriks.value = [
-          [4,3,2,1,4,9],
-          [2,2,8,2,1,9],
-          [2,1,2,3,3,8],
-          [10,5,6,3,2,26]
-        ]
-        },200)
+        // baris.value = 4;
+        // kolom.value = 6;
+        // setTimeout(()=>{
+        //   matriks.value = [
+        //   [4,3,2,1,4,9],
+        //   [2,2,8,2,1,9],
+        //   [2,1,2,3,3,8],
+        //   [10,5,6,3,2,26]
+        // ]
+        // },200)
       })
       watch(baris, (val)=>{
         isConstructing.value = true;

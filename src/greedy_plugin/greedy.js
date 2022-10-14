@@ -12,7 +12,7 @@ function consoleMatriks(matriks){
   console.log()
 }
 
-function clasifyMatriks(matriks){
+function clasifyMatriks(matriks){ 
   let rows = matriks.length;
   let columns = matriks[0].length;
   let cost_matriks = [];
