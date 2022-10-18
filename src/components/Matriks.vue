@@ -49,7 +49,7 @@
         :can-cancel="false" 
         :is-full-page="true"></loading>
   </v-container>
-  <Result :dialog="dialog" :hasil="hasil_vogels_approximation">
+  <Result :dialog="dialog" :hasil="hasil_vogels_approximation" :bruteforce="hasil_bruteforce">
     <template #footer>
       <v-card-actions>
         <v-spacer></v-spacer>
@@ -71,7 +71,7 @@ import { onMounted, ref, watch, watchEffect } from 'vue';
 import logo from '../assets/logo.svg'
 import Loading from 'vue3-loading-overlay';
 import 'vue3-loading-overlay/dist/vue3-loading-overlay.css';
-import { hitungMatriks as hitung } from '../greedy_plugin/greedy'
+import { calcVogelsApproximation, calcBruteForce } from '../greedy_plugin/greedy'
 import Result from './Result.vue'
   export default{
     components:{
@@ -89,12 +89,22 @@ import Result from './Result.vue'
         isConstructing.value = false;
 
         // for using example
-        // matriks.value = [
-        //   [2,3,5,1,8],
-        //   [7,3,5,1,10],
-        //   [4,1,7,2,20],
-        //   [6,8,9,15,38]
-        // ]
+        setTimeout(()=>{
+          matriks.value = [
+            [2,3,5,1,8],
+            [7,3,5,1,10],
+            [4,1,7,2,20],
+            [6,8,9,15,38]
+          ]
+
+          // matriks.value = [
+          //   [2,1,5,1,8],
+          //   [2,3,5,1,10],
+          //   [4,6,7,7,20],
+          //   [6,8,9,15,38]
+          // ]
+        },200);
+        // console.log('tes')
       })
       watch(baris, (val)=>{
         isConstructing.value = true;
@@ -172,11 +182,14 @@ import Result from './Result.vue'
       const isLoading = ref(false)
       const dialog = ref(false)
       const hasil_vogels_approximation = ref(null);
+      const hasil_bruteforce = ref(null);
       const hitungMatriks = () => {
         isLoading.value = true
         let mtrx = matriks.value;
-        hasil_vogels_approximation.value = hitung(mtrx);
-        console.log(hasil_vogels_approximation.value);
+        hasil_vogels_approximation.value = calcVogelsApproximation(mtrx);
+        console.log('hasil_vogels:',hasil_vogels_approximation.value);
+        hasil_bruteforce.value = calcBruteForce(hasil_vogels_approximation.value.matriks_original, hasil_vogels_approximation.value.matriks_vogel, hasil_vogels_approximation.value.vogel_cost);
+        console.log('hasil_bruteforce:', hasil_bruteforce.value);
         dialog.value = true;
         isLoading.value = false;
       }
@@ -195,7 +208,8 @@ import Result from './Result.vue'
         supply,
         dialog,
         demand,
-        hasil_vogels_approximation
+        hasil_vogels_approximation,
+        hasil_bruteforce
       }
     }
   }
