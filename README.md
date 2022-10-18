@@ -20,6 +20,6 @@ https://github.com/aditsud/greedy_bruteforce/blob/main/src/greedy_plugin/greedy.
 ## Dokumen Flowchart
 _Segera Menyusul_
 
-## Dokumen Penjelasan Lainnya
+## Kompleksitas Algoritma
 _Segera Menyusul_
 
