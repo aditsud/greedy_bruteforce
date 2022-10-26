@@ -10,7 +10,8 @@
     </v-row>
     <v-row class="text-center">
       <v-col cols="12">
-        <v-table v-if="isConstructing === false" theme="ligth"  style="border-left: 1px solid #9E9E9E; border-top: 1px solid #9E9E9E;">
+        <h3>Examples Matrix <small>(You can modify the rows, the columns, and the cells)</small></h3>
+        <v-table class="tabelMatriks" v-if="isConstructing === false" theme="ligth"  style="border-left: 1px solid #9E9E9E; border-top: 1px solid #9E9E9E;">
           <thead>
             <tr>
               <th style="border-bottom: 1px solid #9E9E9E; border-right: 1px solid #9E9E9E;">Stock \ Depot</th>
@@ -43,6 +44,7 @@
         <v-btn color="blue" block :disabled="isDisabled" @click="hitungMatriks()">
           Hitung Optimum Cost
         </v-btn>
+        <br/>
       </v-col>
     </v-row>
     <loading :active="isLoading" 
@@ -90,20 +92,27 @@ import Result from './Result.vue'
 
         // for using example
         setTimeout(()=>{
+          // matriks.value = [
+          //   [2,1,5,1,8],
+          //   [2,3,5,1,10],
+          //   [4,6,7,7,20],
+          //   [6,8,9,15,38],
+          //   [2,5,9,10,10],
+          //   [2,7,5,1,10],
+          //   [1,3,5,1,5],
+          //   [2,3,4,1,4],
+          //   [5,1,4,7,12],
+          //   [4,5,3,3,11],
+          //   [20,25,47,36,20]
+          // ]
+
           matriks.value = [
             [2,3,5,1,8],
             [7,3,5,1,10],
             [4,1,7,2,20],
             [6,8,9,15,38]
           ]
-
-          // matriks.value = [
-          //   [2,1,5,1,8],
-          //   [2,3,5,1,10],
-          //   [4,6,7,7,20],
-          //   [6,8,9,15,38]
-          // ]
-        },200);
+        },500);
         // console.log('tes')
       })
       watch(baris, (val)=>{
@@ -183,12 +192,12 @@ import Result from './Result.vue'
       const dialog = ref(false)
       const hasil_vogels_approximation = ref(null);
       const hasil_bruteforce = ref(null);
-      const hitungMatriks = () => {
+      const hitungMatriks = async () => {
         isLoading.value = true
         let mtrx = matriks.value;
-        hasil_vogels_approximation.value = calcVogelsApproximation(mtrx);
+        hasil_vogels_approximation.value = await calcVogelsApproximation(mtrx);
         console.log('hasil_vogels:',hasil_vogels_approximation.value);
-        hasil_bruteforce.value = calcBruteForce(hasil_vogels_approximation.value.matriks_original, hasil_vogels_approximation.value.matriks_vogel, hasil_vogels_approximation.value.vogel_cost);
+        hasil_bruteforce.value = await calcBruteForce(hasil_vogels_approximation.value.matriks_original, hasil_vogels_approximation.value.matriks_vogel, hasil_vogels_approximation.value.vogel_cost);
         console.log('hasil_bruteforce:', hasil_bruteforce.value);
         dialog.value = true;
         isLoading.value = false;
@@ -215,8 +224,11 @@ import Result from './Result.vue'
   }
   </script>
 
-  <style scoped>
-    .matriks :deep(.v-input__details){
-      display: none;
-    }
-  </style>
+<style scoped>
+  .matriks :deep(.v-input__details){
+    display: none;
+  }
+  .tabelMatriks :deep(td){
+    min-width:100px;
+  }
+</style>

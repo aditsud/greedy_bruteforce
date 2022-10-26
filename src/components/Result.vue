@@ -1,11 +1,11 @@
 <template>
-  <v-dialog v-model="dialog">
+  <v-dialog v-model="dialog" scrollable>
     <v-card>
         <v-toolbar color="blue" class="px-5">Hasil Perhitungan Minimum Transportation Cost</v-toolbar>
         <v-card-text>
 
           <h3>Matriks Vogels Approximation <small>Cost: {{hasil ? hasil.vogel_cost : '-'}}</small></h3>
-          <v-table theme="ligth"  style="border-left: 1px solid #9E9E9E; border-top: 1px solid #9E9E9E;">
+          <v-table  class="tabelMatriks" theme="ligth"  style="border-left: 1px solid #9E9E9E; border-top: 1px solid #9E9E9E;">
             <thead>
               <tr>
                 <th style="border-bottom: 1px solid #9E9E9E; border-right: 1px solid #9E9E9E;">Stock \ Depot</th>
@@ -32,7 +32,7 @@
           <div v-for="(bf,id) in bruteforce" :key="`bruteforce-step${id}`">
             <br/>
             <h3>Stepping Stone Step ke-{{id+1}} <small>Cost: {{ bf.new_cost }}</small></h3>
-            <v-table theme="ligth"  style="border-left: 1px solid #9E9E9E; border-top: 1px solid #9E9E9E;">
+            <v-table  class="tabelMatriks" theme="ligth"  style="border-left: 1px solid #9E9E9E; border-top: 1px solid #9E9E9E;">
               <thead>
                 <tr>
                   <th style="border-bottom: 1px solid #9E9E9E; border-right: 1px solid #9E9E9E;">Stock \ Depot</th>
@@ -116,5 +116,8 @@ export default{
 <style scoped>
 .matriks :deep(.v-input__details){
   display: none;
+}
+.tabelMatriks :deep(td){
+  min-width:100px;
 }
 </style>

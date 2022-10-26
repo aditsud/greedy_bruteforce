@@ -290,7 +290,7 @@ export function calcVogelsApproximation(matriks){
   return { matriks_original, matriks_vogel, vogel_cost };
 }
 
-export function calcBruteForce(matriks_original, matriks_vogels, optimum_cost, bruteforce = []){
+export async function calcBruteForce(matriks_original, matriks_vogels, optimum_cost, bruteforce = []){
   matriks_original = cloneObject(matriks_original);
   matriks_vogels = cloneObject(matriks_vogels);
   
@@ -356,7 +356,7 @@ export function calcBruteForce(matriks_original, matriks_vogels, optimum_cost, b
     });
 
     if(new_optimum_cost<optimum_cost)
-      return calcBruteForce(matriks_original, matriks_vogels, new_optimum_cost, bruteforce);
+      return await calcBruteForce(matriks_original, matriks_vogels, new_optimum_cost, bruteforce);
 
   }else{
     let new_optimum_cost = countTheCost(matriks_original, matriks_vogels);
@@ -510,8 +510,6 @@ function getSquare(matriks_vogels, x, y, posisi, square_list, square = []){
 
     // cek kelengkapan L
     if(square.length === 5){
-      let p2 = square[1].posisi; // cek posisi titik kedua
-      let p3 = square[2].posisi; // cek posisi titik ketiga
       let p4 = square[3].posisi; // cek posisi titik keempat
       let p5 = square[4].posisi; // cek posisi titik kelima
 
