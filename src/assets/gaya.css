@@ -1,0 +1,25 @@
+
+.matriks :deep(.v-input__details){
+  display: none;
+}
+.tabelMatriks :deep(td){
+  min-width:100px;
+}
+.border-kiri{
+  border-left: 1px solid #9E9E9E; 
+}
+.border-atas{
+  border-top: 1px solid #9E9E9E;
+}
+.border-kanan{
+  border-right: 1px solid #9E9E9E;
+}
+.border-bawah{
+  border-bottom: 1px solid #9E9E9E !important; 
+}
+.shadow{
+  -webkit-box-shadow: 10px 3px 11px -10px rgba(0,0,0,0.75);
+  -moz-box-shadow: 10px 3px 11px -10px rgba(0,0,0,0.75);
+  box-shadow: 10px 3px 11px -10px rgba(0,0,0,0.75);
+  border-radius: 10px;
+}

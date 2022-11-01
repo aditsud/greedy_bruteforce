@@ -1,25 +1,27 @@
 <template>
-  <v-dialog v-model="dialog" scrollable>
+  <v-dialog v-model="dialog" scrollable >
     <v-card>
-        <v-toolbar color="blue" class="px-5">Hasil Perhitungan Minimum Transportation Cost</v-toolbar>
+        <v-toolbar color="purple" class="px-5">Hasil Perhitungan Minimum Transportation Cost</v-toolbar>
         <v-card-text>
-
+          <h2 class="text-center" v-if="bruteforce && bruteforce.length > 0">OPTIMUM COST: {{bruteforce[bruteforce.length - 1].new_cost}}</h2>
+          <h2 class="text-center" v-else>OPTIMUM COST: {{hasil ? hasil.vogel_cost : '-'}}</h2>
           <h3>Matriks Vogels Approximation <small>Cost: {{hasil ? hasil.vogel_cost : '-'}}</small></h3>
-          <v-table  class="tabelMatriks" theme="ligth"  style="border-left: 1px solid #9E9E9E; border-top: 1px solid #9E9E9E;">
+          <div id="div1"></div>
+          <v-table  class="tabelMatriks border-kiri border-atas" theme="ligth">
             <thead>
               <tr>
-                <th style="border-bottom: 1px solid #9E9E9E; border-right: 1px solid #9E9E9E;">Stock \ Depot</th>
-                <th v-for="i in kolom - 1" :key="`titlex${i}`" style="border-bottom: 1px solid #9E9E9E; border-right: 1px solid #9E9E9E;">B{{i}}</th>
-                <th style="border-bottom: 1px solid #9E9E9E; border-right: 1px solid #9E9E9E;">Supply</th>
+                <th class="border-kanan border-bawah">Stock \ Depot</th>
+                <th v-for="i in kolom - 1" :key="`titlex${i}`" class="border-kanan border-bawah">B{{i}}</th>
+                <th class="border-kanan border-bawah">Supply</th>
               </tr>
 
             </thead>
             <tbody>
               <tr v-for="i in baris" :key="`baris${i}`">
-                <th v-if="i < baris" style="border-bottom: 1px solid #9E9E9E; border-right: 1px solid #9E9E9E;">
+                <th v-if="i < baris" class="border-kanan border-bawah">
                   A{{i}}
                 </th>
-                <th v-else style="border-bottom: 1px solid #9E9E9E; border-right: 1px solid #9E9E9E;">
+                <th v-else class="border-kanan border-bawah">
                   Demand
                 </th>
                 <td v-for="j in kolom" :key="`kolom${j}`" style="padding:0; border-right: 1px solid #9E9E9E">
@@ -32,24 +34,24 @@
           <div v-for="(bf,id) in bruteforce" :key="`bruteforce-step${id}`">
             <br/>
             <h3>Stepping Stone Step ke-{{id+1}} <small>Cost: {{ bf.new_cost }}</small></h3>
-            <v-table  class="tabelMatriks" theme="ligth"  style="border-left: 1px solid #9E9E9E; border-top: 1px solid #9E9E9E;">
+            <v-table  class="tabelMatriks border-kiri border-atas" theme="ligth" >
               <thead>
                 <tr>
-                  <th style="border-bottom: 1px solid #9E9E9E; border-right: 1px solid #9E9E9E;">Stock \ Depot</th>
-                  <th v-for="i in kolom - 1" :key="`titlex${i}`" style="border-bottom: 1px solid #9E9E9E; border-right: 1px solid #9E9E9E;">B{{i}}</th>
-                  <th style="border-bottom: 1px solid #9E9E9E; border-right: 1px solid #9E9E9E;">Supply</th>
+                  <th class="border-kanan border-bawah">Stock \ Depot</th>
+                  <th v-for="i in kolom - 1" :key="`titlex${i}`" class="border-kanan border-bawah">B{{i}}</th>
+                  <th class="border-kanan border-bawah">Supply</th>
                 </tr>
 
               </thead>
               <tbody>
                 <tr v-for="i in baris" :key="`baris${i}`">
-                  <th v-if="i < baris" style="border-bottom: 1px solid #9E9E9E; border-right: 1px solid #9E9E9E;">
+                  <th v-if="i < baris" class="border-kanan border-bawah">
                     A{{i}}
                   </th>
-                  <th v-else style="border-bottom: 1px solid #9E9E9E; border-right: 1px solid #9E9E9E;">
+                  <th v-else class="border-kanan border-bawah">
                     Demand
                   </th>
-                  <td v-for="j in kolom" :key="`kolom${j}`" style="padding:0; border-right: 1px solid #9E9E9E">
+                  <td v-for="j in kolom" :key="`kolom${j}`" class="border-kanan pa-0">
                     <v-text-field type="text" readonly class="matriks" >{{ hasil.matriks_original[i-1][j-1] + ' ' + getMatriksVogel(bf.new_vogels, i-1, j-1) }}</v-text-field>
                   </td>
                 </tr>
@@ -68,16 +70,18 @@
               </v-list-item>
             </v-list>
           </div>
-          <br/>
-          <h2 class="text-center">OPTIMUM COST: {{bruteforce[bruteforce.length - 1].new_cost}}</h2>
+          <div id="div2"></div>
         </v-card-text>
+        
         <slot name="footer"></slot>
       </v-card>
   </v-dialog>
 </template>
 
 <script>
-import { ref, toRef, watch } from 'vue';
+import { onMounted, ref, toRef, watch } from 'vue';
+
+import { testIt } from '../greedy_plugin/createLine';
 
 export default{
   props:['dialog', 'hasil', 'bruteforce'],
@@ -98,6 +102,12 @@ export default{
       }
       return '';
     }
+
+    onMounted(()=>{
+        setTimeout(()=>{
+          //testIt();
+        },5000)
+      })
     
     
     return {
@@ -114,10 +124,5 @@ export default{
 
 
 <style scoped>
-.matriks :deep(.v-input__details){
-  display: none;
-}
-.tabelMatriks :deep(td){
-  min-width:100px;
-}
+@import '../assets/gaya.css'
 </style>

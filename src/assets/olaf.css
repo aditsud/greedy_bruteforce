@@ -1,0 +1,39 @@
+#app > .v-theme--light{
+  background-color: #8BC6EC;
+  background-image: linear-gradient(135deg, #8BC6EC 0%, #9599E2 100%);
+}
+.olafimage{
+  width: 100%;
+  max-width: 80px;
+  padding-left: 15px;
+}
+.post-container {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 350px;  
+  overflow: auto;
+  color: #7355AF;
+}
+.post-thumb {
+  float: left
+}
+.post-thumb img {
+  display: block
+}
+.post-content {
+  padding-top: 15px;
+  margin-left: 80px;
+}
+.post-title {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.Vue-Toastification__toast--default {
+  background-color: #9C27B0 !important;
+}
+
+/* Applied to the toast body when using regular strings as content */
+.Vue-Toastification__toast-body {
+  font-size: 14x !important;
+}

@@ -2,6 +2,9 @@ import 'vuetify/styles' // Global CSS has to be imported
 import { createApp } from 'vue'
 import { createVuetify } from 'vuetify'
 import App from './App.vue'
+import Toast from "vue-toastification";
+// Import the CSS or use your own!
+import "vue-toastification/dist/index.css";
 
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
@@ -13,6 +16,9 @@ const vuetify = createVuetify({
   directives,
 })
 
-app.use(vuetify)
+app.use(vuetify);
+app.use(Toast, {
+  timeout: 4000
+});
 
 app.mount('#app')
