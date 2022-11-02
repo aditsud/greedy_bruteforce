@@ -316,7 +316,7 @@ import { useToast } from "vue-toastification";
               matriks.value[i][j] = supply;
               if(i==matriks.value.length - 2){
                 let total_temp = totalSupply;
-                averageDemand = Math.ceil(totalSupply / (matriks.value.length - 1));
+                averageDemand = Math.ceil(totalSupply / (matriks.value[matriks.value.length-1].length - 1));
                 let temp_demand_array = [];
                 for(let x=0; x<=matriks.value[matriks.value.length-1].length - 2; x++){
                   if(x===matriks.value[matriks.value.length-1].length - 2){
