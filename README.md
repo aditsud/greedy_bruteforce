@@ -12,7 +12,7 @@ https://greedy-olaf.herokuapp.com/
 - Lukman Eka Arifandhi (23222075)
 
 ## Tools
-Aplikasi berbasis web application dengan bahasa pemrograman Javascript (Vue Framework)
+Aplikasi berbasis web application dengan bahasa pemrograman Javascript (Vue Framework) 
 
 ## Sintaks Greedy-Bruteforce
 https://github.com/aditsud/greedy_bruteforce/blob/main/src/greedy_plugin/greedy.js
