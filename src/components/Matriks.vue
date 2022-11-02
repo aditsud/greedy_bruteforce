@@ -1,7 +1,7 @@
 <template>
   <v-container>
+    
     <v-row>
-      
       <v-col cols="6">
         <v-text-field 
           :disabled="isLoading" 
@@ -23,6 +23,48 @@
           v-model="kolom"
           @focus="$event.target.select()"
         ></v-text-field>
+      </v-col>
+    </v-row>
+    <v-row class="text-center mt-0 opsiMatriks">
+      <v-col cols="12">
+        <div class="float-left mr-10">
+          <v-checkbox
+            v-model="withSquarePattern"
+            color="indigo"
+            true-icon="fa-regular fa-square-check"
+            false-icon="fa-regular fa-square"
+          >
+          <template v-slot:label>
+            <div>
+              <v-tooltip location="bottom">
+                <template v-slot:activator="{ props }">
+                  <span
+                    v-bind="props"
+                    @click.stop
+                  >
+                    Menampilkan Hasil Square dan L
+                  </span>
+                </template>
+                Jika ukuran matriks besar, bisa membuat proses lebih lambat atau hang dikarenakan proses rendering 
+                pola Square dan L yang mungkin akan harus dibuat banyak sesuai Square dan L yang
+              </v-tooltip>
+            </div>
+          </template>
+          </v-checkbox>
+        </div>
+        <div class="float-left">
+          <v-btn 
+            color="purple" 
+            class="mt-3" 
+            block 
+            variant="text" 
+            :disabled="isLoading" 
+            @click="generateRandomMatriks()"
+            prepend-icon="fa-solid fa-shuffle"
+          >
+            Generate Random Matriks
+          </v-btn>
+        </div>
       </v-col>
     </v-row>
     <v-row class="text-center">
@@ -62,7 +104,7 @@
       </v-col>
     </v-row>
   </v-container>
-  <Result :dialog="dialog" :hasil="hasil_vogels_approximation" :bruteforce="hasil_bruteforce">
+  <Result :dialog="dialog" :hasil="hasil_vogels_approximation" :bruteforce="hasil_bruteforce" :withSquarePattern="withSquarePattern">
     <template #footer>
       <v-card-actions>
         <v-spacer></v-spacer>
@@ -80,7 +122,7 @@
 
 <script>
 import { computed } from '@vue/reactivity';
-import { onMounted, ref, watch } from 'vue';
+import { inject, onMounted, ref, watch } from 'vue';
 import hitungOptimumCost from '../greedy_plugin/main'
 import { cloneObject } from '../greedy_plugin/utils';
 import Result from './Result.vue';
@@ -92,8 +134,8 @@ import { useToast } from "vue-toastification";
     },
     setup(){
       
-      const baris = ref(4)
-      const kolom = ref(5)
+      const baris = ref(6)
+      const kolom = ref(6)
       const matriks = ref([]);
       const isConstructing = ref(null)
       onMounted(()=>{
@@ -158,14 +200,13 @@ import { useToast } from "vue-toastification";
           // ]
 
           // soal uts
-          matriks.value = [
-            [2,3,5,6,10],
-            [3,2,4,5,10],
-            [3,5,7,4,20],
-            [10,10,10,10,40]
-          ]
+          // matriks.value = [
+          //   [2,3,5,6,10],
+          //   [3,2,4,5,10],
+          //   [3,5,7,4,20],
+          //   [10,10,10,10,40]
+          // ]
         },500);
-        // console.log('tes')
       })
       watch(baris, (val)=>{
         isConstructing.value = true;
@@ -240,6 +281,60 @@ import { useToast } from "vue-toastification";
         return true
       })
 
+      const emitter = inject('emitter');
+      emitter.on('stopLoading', ()=>{
+        isLoading.value = false;
+      })
+
+      const withSquarePattern = ref(false);
+      const randomInteger = (min, max) => {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+      const getStandardDeviation = (array)=> {
+        const n = array.length
+        const mean = array.reduce((a, b) => a + b) / n
+        return Math.sqrt(array.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n)
+      }
+      const generateRandomMatriks = () =>{
+        let totalSupply = 0;
+        let averageDemand = 0;
+        let varianceDemand = 0;
+        for(let i=0; i<matriks.value.length; i++){
+          for(let j=0; j<matriks.value[i].length; j++){
+            if(i===matriks.value.length - 1){
+              if(j===matriks.value[i].length - 2){
+                matriks.value[i][j] = totalSupply;
+              }else if(j<matriks.value[i].length - 2){
+                let demand = averageDemand + randomInteger(-1*varianceDemand, varianceDemand);
+                totalSupply = totalSupply - demand;
+                matriks.value[i][j] = demand;
+              }
+              
+            }else if(j===matriks.value[i].length - 1){
+              let supply = randomInteger(1,30);
+              totalSupply = totalSupply + supply;
+              matriks.value[i][j] = supply;
+              if(i==matriks.value.length - 2){
+                let total_temp = totalSupply;
+                averageDemand = Math.ceil(totalSupply / (matriks.value.length - 1));
+                let temp_demand_array = [];
+                for(let x=0; x<=matriks.value[matriks.value.length-1].length - 2; x++){
+                  if(x===matriks.value[matriks.value.length-1].length - 2){
+                    temp_demand_array.push(total_temp);
+                  }else if(x<matriks.value[matriks.value.length-1].length - 2){
+                    total_temp = total_temp - averageDemand;
+                    temp_demand_array.push(averageDemand);
+                  }
+                }
+                varianceDemand = Math.ceil(getStandardDeviation(temp_demand_array));
+              }
+            }else{
+              matriks.value[i][j] = randomInteger(1,99);
+            }
+          }
+        }
+      }
+
       const isLoading = ref(false)
       const dialog = ref(false)
       const hasil_vogels_approximation = ref(null);
@@ -247,12 +342,15 @@ import { useToast } from "vue-toastification";
       const toast = useToast();
       const hitungMatriks = async () => {
         isLoading.value = true;
-        await wait(1000);
+        await wait(1000); // biar keliatan ada loading indicator
+
         let result = await hitungOptimumCost(cloneObject(matriks.value));
         if(result.status === 'error'){
           toast(result.value);
+          isLoading.value = false;
         }
 
+        // untuk menampilkan hasil perhitungan di console browser
         console.log('---------------');
         console.log('HASIL VOGELS APPROXIMATION DAN BRUTEFORCE');
         console.log(result.value);
@@ -266,13 +364,15 @@ import { useToast } from "vue-toastification";
         };
         hasil_bruteforce.value = result.value.bruteforce_result;
         
+        // munculkan dialog
         dialog.value = true;
-        isLoading.value = false;
       }
 
       const wait = (ms) => {
         return new Promise(r => setTimeout(r, ms));
       }
+
+      
 
       
       
@@ -290,7 +390,9 @@ import { useToast } from "vue-toastification";
         dialog,
         demand,
         hasil_vogels_approximation,
-        hasil_bruteforce
+        hasil_bruteforce,
+        withSquarePattern,
+        generateRandomMatriks
       }
     }
   }

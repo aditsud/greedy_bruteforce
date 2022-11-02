@@ -1,40 +1,16 @@
 <template>
   <v-dialog v-model="dialog" scrollable >
     <v-card>
+        
         <v-toolbar color="purple" class="px-5">Hasil Perhitungan Minimum Transportation Cost</v-toolbar>
-        <v-card-text>
-          <h2 class="text-center" v-if="bruteforce && bruteforce.length > 0">OPTIMUM COST: {{bruteforce[bruteforce.length - 1].new_cost}}</h2>
-          <h2 class="text-center" v-else>OPTIMUM COST: {{hasil ? hasil.vogel_cost : '-'}}</h2>
-          <h3>Matriks Vogels Approximation <small>Cost: {{hasil ? hasil.vogel_cost : '-'}}</small></h3>
-          <div id="div1"></div>
-          <v-table  class="tabelMatriks border-kiri border-atas" theme="ligth">
-            <thead>
-              <tr>
-                <th class="border-kanan border-bawah">Stock \ Depot</th>
-                <th v-for="i in kolom - 1" :key="`titlex${i}`" class="border-kanan border-bawah">B{{i}}</th>
-                <th class="border-kanan border-bawah">Supply</th>
-              </tr>
-
-            </thead>
-            <tbody>
-              <tr v-for="i in baris" :key="`baris${i}`">
-                <th v-if="i < baris" class="border-kanan border-bawah">
-                  A{{i}}
-                </th>
-                <th v-else class="border-kanan border-bawah">
-                  Demand
-                </th>
-                <td v-for="j in kolom" :key="`kolom${j}`" style="padding:0; border-right: 1px solid #9E9E9E">
-                  <v-text-field type="text" readonly class="matriks" >{{ hasil.matriks_original[i-1][j-1] + ' ' + getMatriksVogel(hasil.matriks_vogel, i-1, j-1) }}</v-text-field>
-                </td>
-              </tr>
-            </tbody>
-          </v-table>
-
-          <div v-for="(bf,id) in bruteforce" :key="`bruteforce-step${id}`">
-            <br/>
-            <h3>Stepping Stone Step ke-{{id+1}} <small>Cost: {{ bf.new_cost }}</small></h3>
-            <v-table  class="tabelMatriks border-kiri border-atas" theme="ligth" >
+        <v-card-text >
+          <div id="tabelVogel" style="position: relative;">
+              
+            <h2 class="text-center" v-if="bruteforce && bruteforce.length > 0">OPTIMUM COST: {{bruteforce[bruteforce.length - 1].new_cost}}</h2>
+            <h2 class="text-center" v-else>OPTIMUM COST: {{hasil ? hasil.vogel_cost : '-'}}</h2><br/>
+            <h3>Matriks Vogels Approximation <small>Cost: {{hasil ? hasil.vogel_cost : '-'}}</small></h3>
+            
+            <v-table class="tabelMatriks border-kiri border-atas" theme="ligth" >
               <thead>
                 <tr>
                   <th class="border-kanan border-bawah">Stock \ Depot</th>
@@ -51,26 +27,73 @@
                   <th v-else class="border-kanan border-bawah">
                     Demand
                   </th>
-                  <td v-for="j in kolom" :key="`kolom${j}`" class="border-kanan pa-0">
-                    <v-text-field type="text" readonly class="matriks" >{{ hasil.matriks_original[i-1][j-1] + ' ' + getMatriksVogel(bf.new_vogels, i-1, j-1) }}</v-text-field>
+                  <td v-for="j in kolom" :key="`kolom${j}`" class="border-kanan pa-0" :id="`vogels_cell_x${i-1}_y${j-1}`">
+                    <v-text-field type="text" readonly class="matriks" >{{ hasil.matriks_original[i-1][j-1] + ' ' + getMatriksVogel(hasil.matriks_vogel, i-1, j-1) }}</v-text-field>
                   </td>
                 </tr>
               </tbody>
-            </v-table><br/>
-            <h4>List Square and L Pants:</h4>
-            <v-list lines="one">
-              <v-list-item
-                v-for="(item, idx) in bf.square_list"
-                :key="item.pk"
-                :title="(idx + 1) + '. ' +item.type + '. Diff-cost value: ' + item.diff_cost_temp"
-              >
-                <div v-for="(sq, idxs) in item.square" :key="`square${idxs}`">
-                  (x,y): ({{sq.x}},{{sq.y}}) value: {{sq.value}}
-                </div>
-              </v-list-item>
-            </v-list>
-          </div>
-          <div id="div2"></div>
+            </v-table>
+            <div v-if="bruteforce && bruteforce.length > 0">
+              <br/>
+              <h4>List Square and L Pants:</h4>
+              <v-list lines="one" class="keterangan">
+                <v-list-item
+                  class="keterangan"
+                  v-for="(item, idx) in bruteforce[0].square_list"
+                  :key="item.pk"
+                  :title="(idx + 1) + '. ' +item.type + '. Different Cost Value: ' + item.diff_cost_temp"
+                >
+                  <span v-for="(sq, idxs) in item.square" :key="`square${idxs}`">
+                    (A{{sq.x+1}},B{{sq.y+1}})={{sq.value}} <span v-if="idxs < item.square.length-1">→</span>
+                  </span>
+                </v-list-item>
+              </v-list>
+            </div>
+            <div v-for="(bf,id) in bruteforce" :key="`bruteforce-step${id}`">
+              <div v-if="id < bruteforce.length - 1">
+                <br/>
+                <h3>Stepping Stone Step ke-{{id+1}} <small>Cost: {{ bf.new_cost }}</small></h3>
+                <v-table class="tabelMatriks border-kiri border-atas" theme="ligth" >
+                  <thead>
+                    <tr>
+                      <th class="border-kanan border-bawah">Stock \ Depot</th>
+                      <th v-for="i in kolom - 1" :key="`titlex${i}`" class="border-kanan border-bawah">B{{i}}</th>
+                      <th class="border-kanan border-bawah">Supply</th>
+                    </tr>
+
+                  </thead>
+                  <tbody>
+                    <tr v-for="i in baris" :key="`baris${i}`">
+                      <th v-if="i < baris" class="border-kanan border-bawah">
+                        A{{i}}
+                      </th>
+                      <th v-else class="border-kanan border-bawah">
+                        Demand
+                      </th>
+                      <td v-for="j in kolom" :key="`kolom${j}`" class="border-kanan pa-0" :id="`bruteforce_cell_m${id+1}_x${i-1}_y${j-1}`">
+                        <v-text-field type="text" readonly class="matriks" >{{ hasil.matriks_original[i-1][j-1] + ' ' + getMatriksVogel(bf.new_vogels, i-1, j-1) }}</v-text-field>
+                      </td>
+                    </tr>
+                  </tbody>
+                </v-table>
+                <br/>
+                <h4>List Square and L Pants:</h4>
+                <v-list lines="one" class="keterangan">
+                  <v-list-item
+                    class="keterangan"
+                    v-for="(item, idx) in bruteforce[id+1].square_list"
+                    :key="item.pk"
+                    :title="(idx + 1) + '. ' +item.type + '. Different cost value: ' + item.diff_cost_temp"
+                  >
+                    <span v-for="(sq, idxs) in item.square" :key="`square${idxs}`">
+                      (A{{sq.x+1}},B{{sq.y+1}})={{sq.value}} <span v-if="idxs < item.square.length-1">→</span>
+                    </span>
+                  </v-list-item>
+                </v-list>
+              </div>
+              
+            </div>
+          </div>  
         </v-card-text>
         
         <slot name="footer"></slot>
@@ -79,22 +102,71 @@
 </template>
 
 <script>
-import { onMounted, ref, toRef, watch } from 'vue';
-
-import { testIt } from '../greedy_plugin/createLine';
+import { inject, ref, toRef, watch } from 'vue';
+import createLine from '../greedy_plugin/createLine'
 
 export default{
-  props:['dialog', 'hasil', 'bruteforce'],
+  props:['dialog', 'hasil', 'bruteforce', 'withSquarePattern'],
   setup(props){
     const baris = ref(0);
     const kolom = ref(0);
     const dialog = toRef(props, 'dialog')
     const hasil = toRef(props, 'hasil');
     const bruteforce = toRef(props, 'bruteforce');
+    const emiiter = inject('emitter');
     watch(hasil, (val)=>{
       baris.value = val ? val.matriks_original.length : 0;
       kolom.value = val ? val.matriks_original[0].length : 0;
+
+      // membuat garis pada vogels jika ditemukan square atau L
+      setTimeout(()=>{
+        if(props.withSquarePattern===true && bruteforce.value && bruteforce.value.length > 0){
+          // untuk isi garis pada vogels matriks
+          let square_list = bruteforce.value[0].square_list;
+          for(let i=0; i<square_list.length; i++){
+            let square = square_list[i].square;
+            let variasi_x = getRandomFloat(0, 50, 2); // agar garis tidak berdempetan, jadi digeser dikit
+            let variasi_y = getRandomFloat(-10, 10, 2);; // agar garis tidak berdempetan, jadi digeser dikit
+            let color = generateRandomColorHex();
+            for(let j=0; j<square.length; j++){
+              if(j===square.length-1){ // membuat garis terakhir dengan garis pertama
+                createLine('tabelVogel', `vogels_cell_x${square[j].x}_y${square[j].y}`, `vogels_cell_x${square[0].x}_y${square[0].y}`, variasi_x, variasi_y, color, 85);
+              }else{
+                createLine('tabelVogel', `vogels_cell_x${square[j].x}_y${square[j].y}`, `vogels_cell_x${square[j+1].x}_y${square[j+1].y}`, variasi_x, variasi_y, color, 85);
+              }
+            }
+          }
+
+          // untuk isi garis pada bruteforce
+          for(let m=1; m<bruteforce.value.length; m++){
+            let square_list = bruteforce.value[m].square_list;
+            for(let i=0; i<square_list.length; i++){
+              let square = square_list[i].square;
+              let variasi_x = getRandomFloat(0, 50, 2); // agar garis tidak berdempetan, jadi digeser dikit
+              let variasi_y = getRandomFloat(-10, 10, 2);; // agar garis tidak berdempetan, jadi digeser dikit
+              let color = generateRandomColorHex();
+              for(let j=0; j<square.length; j++){
+                if(j===square.length-1){ // membuat garis terakhir dengan garis pertama
+                  createLine('tabelVogel', `bruteforce_cell_m${m}_x${square[j].x}_y${square[j].y}`, `bruteforce_cell_m${m}_x${square[0].x}_y${square[0].y}`, variasi_x, variasi_y, color, 85);
+                }else{
+                  createLine('tabelVogel', `bruteforce_cell_m${m}_x${square[j].x}_y${square[j].y}`, `bruteforce_cell_m${m}_x${square[j+1].x}_y${square[j+1].y}`, variasi_x, variasi_y, color, 85);
+                }
+              }
+            }
+          }
+        }
+
+        emiiter.emit('stopLoading');
+      },100);
+      
     })
+    const generateRandomColorHex = () => {
+      return "#" + ("00000" + Math.floor(Math.random() * Math.pow(16, 6)).toString(16)).slice(-6);
+    }
+    const getRandomFloat = (min, max, decimals) => {
+      const str = (Math.random() * (max - min) + min).toFixed(decimals);
+      return parseFloat(str);
+    }
     const getMatriksVogel = (matriks_vogel, i, j) =>{
       
       if(typeof matriks_vogel !== 'undefined' && typeof matriks_vogel[i] !== 'undefined' && typeof matriks_vogel[i][j] !== 'undefined' && matriks_vogel[i][j] !== 0){
@@ -103,12 +175,6 @@ export default{
       return '';
     }
 
-    onMounted(()=>{
-        setTimeout(()=>{
-          //testIt();
-        },5000)
-      })
-    
     
     return {
       dialog,

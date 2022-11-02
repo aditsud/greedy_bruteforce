@@ -1,5 +1,3 @@
-// https://www.guru99.com/quicksort-in-javascript.html
-
 function swap(items, leftIndex, rightIndex){
   var temp = items[leftIndex];
   items[leftIndex] = items[rightIndex];

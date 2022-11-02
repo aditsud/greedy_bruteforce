@@ -29,7 +29,7 @@ export async function calcBruteForce(matriks_cost, matriks_vogels){
         minPlus = minPlus * -1;
       }
     }
-
+    
     // setelah dihitung perbedaan cost untuk setiap square dan L yang didapatkan,
     // sekarang array square_list diurutkan ascending berdasarkan key diff_cost_temp
     // setelah itu dilihat apakah array square pada urutan pertama memiliki perbedaan cost yang negatif atau tidak
@@ -78,30 +78,21 @@ export async function calcBruteForce(matriks_cost, matriks_vogels){
       }
 
       // jika tidak ada yang optimum, tetap dikembalikan hasilnya untuk ditampilkan hasil square dan L nya
-      // resolve({
-      //   status: 'success',
-      //   value: {
-      //     square_list: square_list,
-      //     diff_cost_temp: square_list[0].diff_cost_temp,
-      //     new_vogels: matriks_vogels,
-      //     new_cost: countTheVogelCost(matriks_cost, matriks_vogels)
-      //   }
-      // });
+      // untuk memvalidadsi bahwa hasil perhitungan yg sebelumnya (entah bruteforce atau vogel) masih yang terbaik
+      // ini dikembalikan hanya untuk memperlihatkan pola L dan Square yang ditemukan tidak memberikan different cost value yang minus
+      resolve({
+        status: 'success',
+        value: {
+          square_list: square_list,
+          diff_cost_temp: square_list[0].diff_cost_temp,
+          new_vogels: matriks_vogels,
+          new_cost: countTheVogelCost(matriks_cost, matriks_vogels)
+        }
+      });
       
     }
     
     resolve(false)
-    // else{
-    //   let new_optimum_cost = countTheCost(matriks_cost, matriks_vogels);
-    //   resolve({
-    //     square_list: square_list,
-    //     diff_cost_temp: square_list[0].diff_cost_temp,
-    //     new_vogels: matriks_vogels,
-    //     new_cost: new_optimum_cost
-    //   });
-    // }
-    // tidak ada yang optimum, tidak perlu melanjutkan bruteforce
-    // vogels has already the optimum cost
 
 
   });

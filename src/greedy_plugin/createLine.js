@@ -1,12 +1,29 @@
-function connect(div1, div2, color, thickness) {
+// Fungsi ini untuk mendapatkan koordinat dari suatu elemen html
+const getOffset = ( el ) => {
+  let _x = 0;
+  let _y = 0;
+  while( el && !isNaN( el.offsetLeft ) && !isNaN( el.offsetTop ) ) {
+      _x += el.offsetLeft - el.scrollLeft;
+      _y += el.offsetTop - el.scrollTop;
+      el = el.offsetParent;
+  }
+  return { top: _y, left: _x };
+}
+
+// fungsi ini untuk membuat garis dari dua titik koordinat suatu elemen html
+export default function connect(idCanvas, div1_id, div2_id, variasi_x=0, variasi_y=0, color="red", correctionY=0, thickness=2) { // draw a line connecting elements
+
+  let div1 = document.getElementById(div1_id);
+  let div2 = document.getElementById(div2_id);
+  
   var off1 = getOffset(div1);
   var off2 = getOffset(div2);
   // bottom right
-  var x1 = off1.left + off1.width;
-  var y1 = off1.top + off1.height;
+  var x1 = off1.left + variasi_x;
+  var y1 = off1.top + variasi_y - correctionY;
   // top right
-  var x2 = off2.left + off2.width;
-  var y2 = off2.top;
+  var x2 = off2.left + variasi_x;
+  var y2 = off2.top + variasi_y - correctionY;
   // distance
   var length = Math.sqrt(((x2-x1) * (x2-x1)) + ((y2-y1) * (y2-y1)));
   // center
@@ -15,23 +32,8 @@ function connect(div1, div2, color, thickness) {
   // angle
   var angle = Math.atan2((y1-y2),(x1-x2))*(180/Math.PI);
   // make hr
-  var htmlLine = "<div style='z-index:99999999999; padding:0px; margin:0px; height:" + thickness + "px; background-color:" + color + "; line-height:1px; position:absolute; left:" + cx + "px; top:" + cy + "px; width:" + length + "px; -moz-transform:rotate(" + angle + "deg); -webkit-transform:rotate(" + angle + "deg); -o-transform:rotate(" + angle + "deg); -ms-transform:rotate(" + angle + "deg); transform:rotate(" + angle + "deg);' />";
+  var htmlLine = "<div style='opacity: 0.7; padding:0px; margin:0px; height:" + thickness + "px; background-color:" + color + "; line-height:1px; position:absolute; left:" + cx + "px; top:" + cy + "px; width:" + length + "px; -moz-transform:rotate(" + angle + "deg); -webkit-transform:rotate(" + angle + "deg); -o-transform:rotate(" + angle + "deg); -ms-transform:rotate(" + angle + "deg); transform:rotate(" + angle + "deg);' />";
   //
-  document.body.innerHTML += htmlLine; 
-}
-
-function getOffset( el ) {
-  var rect = el.getBoundingClientRect();
-  return {
-      left: rect.left + window.pageXOffset,
-      top: rect.top + window.pageYOffset,
-      width: rect.width || el.offsetWidth,
-      height: rect.height || el.offsetHeight
-  };
-}
-
-export const testIt = () => {
-  var div1 = document.getElementById('div1');
-  var div2 = document.getElementById('div2')
-  connect(div1, div2, "#0F0", 5);
+  // alert(htmlLine);
+  document.getElementById(idCanvas).innerHTML += htmlLine;
 }

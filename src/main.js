@@ -10,6 +10,9 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 import '@fortawesome/fontawesome-free/css/all.min.css'
 
+import mitt from 'mitt';                  // Import mitt
+const emitter = mitt();  
+
 const app = createApp(App)
 const vuetify = createVuetify({
   components,
@@ -20,5 +23,5 @@ app.use(vuetify);
 app.use(Toast, {
   timeout: 4000
 });
-
+app.provide('emitter', emitter);  
 app.mount('#app')

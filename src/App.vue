@@ -6,7 +6,17 @@
             <div class="post-thumb"><img class="olafimage" :src="olafimage" /></div>
             <div class="post-content">
                 <h3 class="post-title">Greedy - Brute Force</h3>
-                <p>Kelompok Olaf</p>
+                <v-tooltip location="bottom">
+                  <template v-slot:activator="{ props }">
+                    <p v-bind="props" @click.stop>Kelompok Olaf</p>
+                  </template>
+                  Aditya Sudyana (23222063)<br/>
+                  Ananda Sadam Firdaus (23222040)<br/>
+                  Atikasari (23222049)<br/>
+                  Lukman Eka Arifandhi (23222075)<br/>
+                  Naufal Fahmi Zakiuddin (23222070)
+                </v-tooltip>
+                
           </div>
         </div>
       </div>
