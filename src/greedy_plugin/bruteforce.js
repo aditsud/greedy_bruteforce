@@ -59,10 +59,6 @@ export async function calcBruteForce(matriks_cost, matriks_vogels){
         sort(titik_titik_list); // diurutkan asc
         let diff_quant_value = titik_titik_list[0]; // diambil yang terkecil
 
-        // let neighbor_idx0 = matriks_vogels[ optimum_square[0].x][ optimum_square[0].y];
-        // let neighbor_idxLenMin1 = matriks_vogels[ optimum_square[optimum_square.length - 2].x][ optimum_square[optimum_square.length - 2].y];
-        // let diff_quant_value = neighbor_idx0 < neighbor_idxLenMin1 ? neighbor_idx0 : neighbor_idxLenMin1;
-
         // update nilai cell vogel yang bersesuaian dengan pola optimum_square
         let minPlus = 1; // untuk positif dan negatif
         // let new_optimum_cost = 0;
