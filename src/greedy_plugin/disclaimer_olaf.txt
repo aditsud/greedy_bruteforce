@@ -1,2 +1,0 @@
-Semua kodingan yang ditulis di sini adalah ketikkan dari kami semua, murni dari hasil pemikiran kami, tidak menggunakan library apapun.
-Adapun kami memakai VueJS hanya sebagai frontend saja.

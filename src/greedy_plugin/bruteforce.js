@@ -1,3 +1,4 @@
+import { sort } from "./quicksort";
 import { cloneObject, countTheVogelCost, getSquare } from "./utils";
 
 
@@ -40,17 +41,27 @@ export async function calcBruteForce(matriks_cost, matriks_vogels){
         
         let optimum_square = square_list[0].square; // pola square atau L disimpan di variabel ini
 
-        // step 3: change the previous vogels with new quantity position
-        // check the neighbor of the zero where node that have the biggest quantity
-
         // dalam rangka menerapkan perubahan square ke existing matriks vogel,
-        // maka kita cek terlebih dahulu nilai cell vogels pada titik pertama square dan pada titik yang ada pada sebelum titik 0
-        // cari yang terkecil antara dua titik yang diperiksa teresebut (sebut saja diff_quant_value), 
+        // maka kita cek terlebih dahulu nilai cell vogels pada titik pertama square dan pada titik yang ada pada sebelum titik 0 (untuk square) atau
+        // cek nilai cell vogels pada titik pertama, ketiga, dan kelima (untuk L)
+        // cari yang terkecil antara titik-titik yang diperiksa teresebut (sebut saja diff_quant_value), 
         // karena diff_quant_value akan digunakan untuk merubah isi cell pada matriks vogel yang termasuk pada pola optimum_square dengan cara
         // menambahkan atau mengurangkan nilai cell sebelumnya dengan diff_quant_value
-        let neighbor_idx0 = matriks_vogels[ optimum_square[0].x][ optimum_square[0].y];
-        let neighbor_idxLenMin1 = matriks_vogels[ optimum_square[optimum_square.length - 2].x][ optimum_square[optimum_square.length - 2].y];
-        let diff_quant_value = neighbor_idx0 < neighbor_idxLenMin1 ? neighbor_idx0 : neighbor_idxLenMin1;
+        let titik_titik_list = [];
+        if(optimum_square.length===4){ // jika merupakan square
+          titik_titik_list.push(matriks_vogels[ optimum_square[0].x][ optimum_square[0].y]);
+          titik_titik_list.push(matriks_vogels[ optimum_square[optimum_square.length - 2].x][ optimum_square[optimum_square.length - 2].y]);
+        }else{ // jika merupakan L
+          titik_titik_list.push(matriks_vogels[ optimum_square[0].x][ optimum_square[0].y]);
+          titik_titik_list.push(matriks_vogels[ optimum_square[optimum_square.length - 2].x][ optimum_square[optimum_square.length - 2].y]);
+          titik_titik_list.push(matriks_vogels[ optimum_square[optimum_square.length - 4].x][ optimum_square[optimum_square.length - 4].y]);
+        }
+        sort(titik_titik_list); // diurutkan asc
+        let diff_quant_value = titik_titik_list[0]; // diambil yang terkecil
+
+        // let neighbor_idx0 = matriks_vogels[ optimum_square[0].x][ optimum_square[0].y];
+        // let neighbor_idxLenMin1 = matriks_vogels[ optimum_square[optimum_square.length - 2].x][ optimum_square[optimum_square.length - 2].y];
+        // let diff_quant_value = neighbor_idx0 < neighbor_idxLenMin1 ? neighbor_idx0 : neighbor_idxLenMin1;
 
         // update nilai cell vogel yang bersesuaian dengan pola optimum_square
         let minPlus = 1; // untuk positif dan negatif

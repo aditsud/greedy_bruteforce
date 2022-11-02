@@ -134,8 +134,8 @@ import { useToast } from "vue-toastification";
     },
     setup(){
       
-      const baris = ref(6)
-      const kolom = ref(6)
+      const baris = ref(4)
+      const kolom = ref(5)
       const matriks = ref([]);
       const isConstructing = ref(null)
       onMounted(()=>{
@@ -183,21 +183,21 @@ import { useToast } from "vue-toastification";
           // ]
 
           // matriks fadli 2366
-          matriks.value = [
-            [70,37,6,76,17,18],
-            [59,90,93,5,10,17],
-            [93,62,77,47,62,19],
-            [54,55,26,9,84,13],
-            [53,20,84,15,9,15],
-            [16,18,20,14,14,82]
-          ]
-
           // matriks.value = [
-          //   [2,3,5,1,8],
-          //   [7,3,5,1,10],
-          //   [4,1,7,2,20],
-          //   [6,8,9,15,38]
+          //   [70,37,6,76,17,18],
+          //   [59,90,93,5,10,17],
+          //   [93,62,77,47,62,19],
+          //   [54,55,26,9,84,13],
+          //   [53,20,84,15,9,15],
+          //   [16,18,20,14,14,82]
           // ]
+
+          matriks.value = [
+            [2,3,5,1,8],
+            [7,3,5,1,10],
+            [4,1,7,2,20],
+            [6,8,9,15,38]
+          ]
 
           // soal uts
           // matriks.value = [
