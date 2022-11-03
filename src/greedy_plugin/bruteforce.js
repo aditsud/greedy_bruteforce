@@ -110,9 +110,6 @@ export async function calcBruteForce(matriks_cost, matriks_vogels){
       }
     });
 
-    
-    return resolve(false)
-
 
   });
   

@@ -5,13 +5,17 @@
 .tabelMatriks :deep(td){
   min-width:100px;
 }
+.tabelResult :deep(.v-table__wrapper){
+  overflow-x: visible !important;
+  overflow-y: visible !important;
+}
 .border-kiri{
   border-left: 1px solid #9E9E9E; 
 }
 .border-atas{
   border-top: 1px solid #9E9E9E;
 }
-.border-kanan{
+.border-kanan{ 
   border-right: 1px solid #9E9E9E;
 }
 .border-bawah{

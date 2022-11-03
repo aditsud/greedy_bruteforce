@@ -35,5 +35,9 @@ export default function connect(idCanvas, div1_id, div2_id, variasi_x=0, variasi
   var htmlLine = "<div style='opacity: 0.7; padding:0px; margin:0px; height:" + thickness + "px; background-color:" + color + "; line-height:1px; position:absolute; left:" + cx + "px; top:" + cy + "px; width:" + length + "px; -moz-transform:rotate(" + angle + "deg); -webkit-transform:rotate(" + angle + "deg); -o-transform:rotate(" + angle + "deg); -ms-transform:rotate(" + angle + "deg); transform:rotate(" + angle + "deg);' />";
   //
   // alert(htmlLine);
-  document.getElementById(idCanvas).innerHTML += htmlLine;
+  return {
+    html: htmlLine,
+    id: idCanvas
+  }
+  //document.getElementById(idCanvas).innerHTML += htmlLine;
 }

@@ -349,6 +349,8 @@ import 'dayjs/locale/id';
       
       emitter.on('stopLoading', ()=>{
         isLoading.value = false;
+        // munculkan dialog
+        dialog.value = true;
       })
 
       const withSquarePattern = ref(false);
@@ -403,7 +405,7 @@ import 'dayjs/locale/id';
       const isLoading = ref(false)
       const dialog = ref(false)
       const hasil_vogels_approximation = ref(null);
-      const hasil_bruteforce = ref(null);
+      const hasil_bruteforce = ref([]);
       const toast = useToast();
       const hitungMatriks = async () => {
         isLoading.value = true;
@@ -429,8 +431,11 @@ import 'dayjs/locale/id';
         };
         hasil_bruteforce.value = result.value.bruteforce_result;
         
+        
+        isLoading.value = false;
         // munculkan dialog
         dialog.value = true;
+        
       }
 
       const wait = (ms) => {
