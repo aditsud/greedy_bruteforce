@@ -1,30 +1,5 @@
 <template>
   <v-container>
-    
-    <v-row>
-      <v-col cols="6">
-        <v-text-field 
-          :disabled="isLoading" 
-          color="purple" 
-          variant="solo" 
-          type="number" 
-          label="Baris" 
-          v-model="baris" 
-          @focus="$event.target.select()"
-        ></v-text-field>
-      </v-col>
-      <v-col cols="6">
-        <v-text-field 
-          :disabled="isLoading" 
-          color="purple" 
-          variant="solo" 
-          type="number" 
-          label="Kolom" 
-          v-model="kolom"
-          @focus="$event.target.select()"
-        ></v-text-field>
-      </v-col>
-    </v-row>
     <v-row class="text-center mt-0 opsiMatriks">
       <v-col cols="12">
         <div class="float-left mr-10">
@@ -33,6 +8,7 @@
             color="indigo"
             true-icon="fa-regular fa-square-check"
             false-icon="fa-regular fa-square"
+            :disabled="isLoading"
           >
           <template v-slot:label>
             <div>
@@ -41,12 +17,12 @@
                   <span
                     v-bind="props"
                     @click.stop
+                    class="checkboxSquare"
                   >
                     Menampilkan Hasil Square dan L
                   </span>
                 </template>
-                Jika ukuran matriks besar, bisa membuat proses lebih lambat atau hang dikarenakan proses rendering 
-                pola Square dan L yang mungkin akan harus dibuat banyak sesuai Square dan L yang
+                Mungkin akan membuat kinerja komputasi melambat karena proses rendering pola Square dan L, bergantung dari jumlah baris dan kolom serta banyaknya pola yang ditemukan.
               </v-tooltip>
             </div>
           </template>
@@ -55,16 +31,62 @@
         <div class="float-left">
           <v-btn 
             color="purple" 
-            class="mt-3" 
-            block 
+            style="margin-top:10px" 
             variant="text" 
             :disabled="isLoading" 
             @click="generateRandomMatriks()"
             prepend-icon="fa-solid fa-shuffle"
           >
-            Generate Random Matriks
+            Random Matriks
           </v-btn>
         </div>
+        <div class="float-left">
+          <v-btn 
+            color="purple" 
+            style="margin-top:10px" 
+            variant="text" 
+            :disabled="isLoading" 
+            @click="dialogLoadMatriks=true"
+            prepend-icon="fa-solid fa-folder-open"
+          >
+            Load Matriks
+          </v-btn>
+        </div>
+        <div class="float-left">
+          <v-btn 
+            color="purple" 
+            style="margin-top:10px" 
+            variant="text" 
+            @click="saveMatriksDialog()"
+            prepend-icon="fa-solid fa-save"
+          >
+            Save Matriks
+          </v-btn>
+        </div>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col cols="6">
+        <v-text-field 
+          :disabled="isLoading" 
+          color="purple" 
+          variant="solo" 
+          type="number" 
+          label="Baris Cost" 
+          v-model="baris_cost" 
+          @focus="$event.target.select()"
+        ></v-text-field>
+      </v-col>
+      <v-col cols="6">
+        <v-text-field 
+          :disabled="isLoading" 
+          color="purple" 
+          variant="solo" 
+          type="number" 
+          label="Kolom Cost" 
+          v-model="kolom_cost"
+          @focus="$event.target.select()"
+        ></v-text-field>
       </v-col>
     </v-row>
     <v-row class="text-center">
@@ -118,6 +140,49 @@
       </v-card-actions>
     </template>
   </Result>
+  <LoadMatriks :dialog="dialogLoadMatriks">
+    <template #footer>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn
+          color="purple"
+          flat
+          @click="dialogLoadMatriks = false"
+        >
+          Tutup
+        </v-btn>
+      </v-card-actions>
+    </template>
+  </LoadMatriks>
+  <v-dialog v-model="dialogSave" class="dialogHapus" transition="dialog-bottom-transition" >
+    <v-card>
+      <v-card-text >
+        
+        <p class="text-justify text-body-2 mb-2">
+          Matriks akan disimpan pada local storage di browser ini. Oleh karena itu, matriks yang Anda akan simpan hanya bisa diakses kembali pada browser ini saja.<br/><br/> 
+        </p>
+        <v-text-field label="Nama Matriks" variant="outlined" v-model="namaMatriks"></v-text-field>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn
+          color="purple"
+          flat
+          @click="simpanMatriks()"
+        >
+          Simpan
+        </v-btn>
+        <v-btn
+          color="purple"
+          flat
+          @click="dialogSave=false"
+        >
+          Batal
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+    
+  </v-dialog>
 </template>
 
 <script>
@@ -126,87 +191,87 @@ import { inject, onMounted, ref, watch } from 'vue';
 import hitungOptimumCost from '../greedy_plugin/main'
 import { cloneObject } from '../greedy_plugin/utils';
 import Result from './Result.vue';
+import LoadMatriks from './LoadMatriks.vue';
 import { useToast } from "vue-toastification";
+import dayjs from 'dayjs';
+import 'dayjs/locale/id';
+
 
   export default{
     components:{
-      Result
+      Result,
+      LoadMatriks
     },
     setup(){
-      
+      const emitter = inject('emitter');
       const baris = ref(4)
-      const kolom = ref(5)
+      const kolom = ref(4)
+
+      const baris_cost = computed({
+        get(){
+          return baris.value - 1;
+        },
+        set(newValue){
+          baris.value = newValue + 1;
+        }
+      })
+      const kolom_cost = computed({
+        get(){
+          return kolom.value - 1;
+        },
+        set(newValue){
+          kolom.value = newValue + 1;
+        }
+      })
+
+      emitter.on('applyMatriks', (mtrx)=>{
+        baris.value = mtrx.length;
+        kolom.value = mtrx[0].length;
+        setTimeout(()=>{
+          matriks.value = mtrx;
+          dialogLoadMatriks.value = false;
+          toast("Matriks berhasil dimuat")
+        },500)
+      })
+      const dialogLoadMatriks = ref(false);
+      const dialogSave = ref(false);
+      const namaMatriks = ref('');
+      const saveMatriksDialog = () =>{
+        namaMatriks.value = '';
+        dialogSave.value = true;
+      }
+      const simpanMatriks = () => {
+        if(namaMatriks.value==''){
+          toast('Nama Matriks tidak boleh kosong')
+          return;
+        }
+        let getSavedMatriks = localStorage.getItem('saved_matriks_kelompok_olaf');
+        if(getSavedMatriks === null || typeof getSavedMatriks === 'undefined'){
+          getSavedMatriks = '[]';
+        }
+        let savedMatriks = JSON.parse(getSavedMatriks);
+        savedMatriks.push({
+          nama: namaMatriks.value,
+          matriks: matriks.value,
+          jenis: 'saved',
+          tanggal: dayjs().locale('id').format('[Disimpan pada:] DD MMMM YYYY HH:mm:ss')
+        })
+        localStorage.setItem('saved_matriks_kelompok_olaf', JSON.stringify(savedMatriks));
+        namaMatriks.value = '';
+        dialogSave.value = false;
+        toast('Berhasil menyimpan matriks');
+        emitter.emit('loadMatriks')
+      }
+
       const matriks = ref([]);
       const isConstructing = ref(null)
       onMounted(()=>{
+
         isConstructing.value = true;
-        createMatriks()
+        createMatriks();
+        generateRandomMatriks();
         isConstructing.value = false;
 
-        // for using example
-        setTimeout(()=>{
-          // matriks.value = [
-          //   [2,1,5,1,8],
-          //   [2,3,5,1,10],
-          //   [4,6,7,7,20],
-          //   [6,8,9,15,38],
-          //   [2,5,9,10,10],
-          //   [2,7,5,1,10],
-          //   [1,3,5,1,5],
-          //   [2,3,4,1,4],
-          //   [5,1,4,7,12],
-          //   [4,5,3,3,11],
-          //   [20,25,47,36,20]
-          // ]
-
-          // matriks.value = [
-          //   [2,10,6,13,14],
-          //   [10,3,7,15,14],
-          //   [9,2,14,9,12],
-          //   [9,9,13,9,0]
-          // ]
-
-          // soal fadli gak bisa
-          // matriks.value = [
-          //   [6,5,12,7,16,18,13,14,18,9,12,5],
-          //   [14,6,19,9,17,2,8,10,8,20,7,9],
-          //   [16,2,5,11,16,1,4,8,8,10,11,7],
-          //   [20,7,14,19,4,1,2,6,2,9,12,6],
-          //   [4,16,9,10,9,14,11,15,10,3,6,11],
-          //   [16,18,20,15,9,19,9,1,5,5,9,7],
-          //   [16,20,18,18,5,17,19,2,5,4,15,14],
-          //   [9,12,17,19,13,13,8,5,4,17,14,4],
-          //   [1,2,15,6,1,14,11,6,12,8,13,6],
-          //   [5,5,7,14,7,11,19,5,14,8,10,6],
-          //   [7,16,10,17,2,3,11,11,1,11,18,5],
-          //   [12,11,6,11,7,5,5,6,4,7,6,80]
-          // ]
-
-          // matriks fadli 2366
-          // matriks.value = [
-          //   [70,37,6,76,17,18],
-          //   [59,90,93,5,10,17],
-          //   [93,62,77,47,62,19],
-          //   [54,55,26,9,84,13],
-          //   [53,20,84,15,9,15],
-          //   [16,18,20,14,14,82]
-          // ]
-
-          matriks.value = [
-            [2,3,5,1,8],
-            [7,3,5,1,10],
-            [4,1,7,2,20],
-            [6,8,9,15,38]
-          ]
-
-          // soal uts
-          // matriks.value = [
-          //   [2,3,5,6,10],
-          //   [3,2,4,5,10],
-          //   [3,5,7,4,20],
-          //   [10,10,10,10,40]
-          // ]
-        },500);
       })
       watch(baris, (val)=>{
         isConstructing.value = true;
@@ -281,7 +346,7 @@ import { useToast } from "vue-toastification";
         return true
       })
 
-      const emitter = inject('emitter');
+      
       emitter.on('stopLoading', ()=>{
         isLoading.value = false;
       })
@@ -379,6 +444,8 @@ import { useToast } from "vue-toastification";
       return{
         baris,
         kolom,
+        baris_cost,
+        kolom_cost,
         matriks,
         isConstructing,
         preventEmpty,
@@ -392,7 +459,12 @@ import { useToast } from "vue-toastification";
         hasil_vogels_approximation,
         hasil_bruteforce,
         withSquarePattern,
-        generateRandomMatriks
+        generateRandomMatriks,
+        dialogLoadMatriks,
+        saveMatriksDialog,
+        dialogSave,
+        namaMatriks,
+        simpanMatriks
       }
     }
   }

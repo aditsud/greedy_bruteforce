@@ -25,7 +25,7 @@ export async function calcVogelsApproximation(cost_matriks, demand_matriks, supp
       let penalty = determinePenalty(c_m, forbidden_row, forbidden_col);
       // jika penalty tidak bisa dihitung, maka perhitungan vogels approximation tidak bisa dihitung
       if(penalty === false){
-        resolve({
+        return resolve({
           status: 'error',
           value: 'Ada kondisi dimana penalty terbesar tidak dapat ditentukan'
         });
@@ -36,7 +36,7 @@ export async function calcVogelsApproximation(cost_matriks, demand_matriks, supp
 
       // jika rowAoI dan columnAoI bernilai [] (array kosong), maka proses vogel tidak bisa dilanjutkan
       if(rowAoI.length===0 && columnAoI.length===0){
-        resolve({
+        return resolve({
           status: 'error',
           value: 'Ada kondisi dimana tidak ada baris dan kolom yang dapat ditentukan berdasarkan nilai penalty terbesar'
         });
@@ -47,7 +47,7 @@ export async function calcVogelsApproximation(cost_matriks, demand_matriks, supp
 
       // jika indeks baris dan kolom dari theLowCost bernilai -1 dan -1, maka proses vogel tidak bisa dilanjutkan
       if(theLowCost.idx_row === -1 || theLowCost.idx_col === -1){
-        resolve({
+        return resolve({
           status: 'error',
           value: 'Ada kondisi dimana nilai cost terkecil yang terpilih tidak ditemukan di matriks cost'
         });
@@ -69,7 +69,7 @@ export async function calcVogelsApproximation(cost_matriks, demand_matriks, supp
     let cost_vogels = countTheVogelCost(c_m, vogels);
 
     
-    resolve({
+    return resolve({
       status: 'success',
       value: {
         matriks_vogels: vogels,

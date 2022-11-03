@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialog" scrollable >
+  <v-dialog v-model="dialog" scrollable transition="dialog-bottom-transition">
     <v-card>
         
         <v-toolbar color="purple" class="px-5">Hasil Perhitungan Minimum Transportation Cost</v-toolbar>
@@ -35,7 +35,7 @@
             </v-table>
             <div v-if="bruteforce && bruteforce.length > 0">
               <br/>
-              <h4>List Square and L Pants:</h4>
+              <h4 v-if=" bruteforce[0].square_list > 0">List Square and L Pants:</h4>
               <v-list lines="one" class="keterangan">
                 <v-list-item
                   class="keterangan"
@@ -77,7 +77,7 @@
                   </tbody>
                 </v-table>
                 <br/>
-                <h4>List Square and L Pants:</h4>
+                <h4 v-if="bruteforce[id+1].square_list > 0">List Square and L Pants:</h4>
                 <v-list lines="one" class="keterangan">
                   <v-list-item
                     class="keterangan"

@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-main>
-      <div class="text-center mt-10 mb-10 font-weight-bold">
+      <div class="text-center mt-10 mb-0 font-weight-bold">
         <div class="post-container">                
             <div class="post-thumb"><img class="olafimage" :src="olafimage" /></div>
             <div class="post-content">

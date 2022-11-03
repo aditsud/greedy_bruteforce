@@ -8,6 +8,23 @@ Untuk Tugas Besar Matematika Lanjut
 - Lukman Eka Arifandhi (23222075)
 - Naufal Fahmi Zakiuddin (23222070)
 
+#### Daftar Isi
+- [Demo](#demo)
+- [Tools yang Dipakai](#tools-yang-dipakai)
+- [Lokasi Kodingan Inti](#lokasi-kodingan-inti)
+- [Sedikit Informasi Tentang Web Frontendnya](#sedikit-informasi-tentang-web-frontendnya)
+- [Dokumen Flowchart](#dokumen-flowchart)
+- [Kompleksitas Algoritma](#kompleksitas-algoritma)
+- [Screenshot Aplikasi](#screenshot-aplikasi)
+  * [Beranda](#beranda)
+  * [Vogels Approximation](#vogels-approximation)
+  * [Brute Force (Stepping Stone)](#brute-force--stepping-stone-)
+- [Cara Instalasi di Localhost](#cara-instalasi-di-localhost)
+- [Keunggulan Aplikasi Ini](#keunggulan-aplikasi-ini)
+- [Kelemahan Aplikasi Ini](#kelemahan-aplikasi-ini)
+- [Semoga Bermanfaat](#semoga-bermanfaat)
+
+
 #### Demo
 https://greedy-olaf.herokuapp.com/
 
@@ -83,6 +100,6 @@ Pengguna bisa memasukkan **_matriks cost, supply,_ dan _demand_** dengan sesuka 
 #### Kelemahan Aplikasi Ini
 Karena ini adalah aplikasi berbasis web (javascript), kinerja dari aplikasi ini akan sangat bergantung pada spesifikasi dari perangkat pengguna (laptop/PC/smartphone/dll) dan juga browsernya karena javascript berjalan di atas browser.
 
-# Semoga Bermanfaat
+#### Semoga Bermanfaat
 
 

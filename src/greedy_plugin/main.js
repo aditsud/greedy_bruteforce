@@ -1,6 +1,6 @@
 import { calcBruteForce } from './bruteforce.js';
 import { calcVogelsApproximation } from './greedy.js';
-import { clasifyMatriks } from './utils.js';
+import { clasifyMatriks, cloneObject } from './utils.js';
 
 
 // ini adalah FUNGSI UTAMA PADA APLIKASI INI untuk menjalankan perhitungan cost minimum dengan vogels approximation dan stepping stone
@@ -60,7 +60,7 @@ export default async function (matriks){
         value: result_bruteforce.value
       }
     }
-    proses_bruteforce.push(result_bruteforce.value);
+    if(result_bruteforce.value) proses_bruteforce.push(result_bruteforce.value);
   }
 
   // Ini adalah hasil cost terakhir yang sudah paling minimal

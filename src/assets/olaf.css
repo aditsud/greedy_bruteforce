@@ -37,3 +37,25 @@
 .Vue-Toastification__toast-body {
   font-size: 14x !important;
 }
+
+.v-selection-control > .v-label.v-label--clickable{
+  opacity: 1 !important;
+}
+
+.v-selection-control > .v-label.v-label--clickable{
+  opacity: 1 !important;
+}
+
+.v-selection-control {
+  height: 28px;
+  margin-right: -20px !important;
+}
+
+.v-selection-control  .checkboxSquare{
+  color: #9C27B0; 
+  font-size: 0.875rem;
+  letter-spacing: 0.0892857143em;
+  text-indent: 0.0892857143em;
+  text-transform: uppercase; 
+  font-weight: 400; 
+}

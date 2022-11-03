@@ -37,6 +37,7 @@ export async function calcBruteForce(matriks_cost, matriks_vogels){
     // jika negatif, maka itu adalah cikal bakal cost yang lebih optimum daripada yang sebelumnya
     if(square_list.length > 0){
       square_list.sort(function(a, b) { return a.diff_cost_temp - b.diff_cost_temp ; }); // urutkan array_list berdasarkan diff_cost_temp asc
+      
       if(square_list[0].diff_cost_temp < 0){ // ditemukan pola square yang memiliki cikal bakal cost yg lebih optimum
         
         let optimum_square = square_list[0].square; // pola square atau L disimpan di variabel ini
@@ -72,7 +73,7 @@ export async function calcBruteForce(matriks_cost, matriks_vogels){
 
         // validasi cost optimumnya dengan cara stepping stone lagi
         // save all value for display in html
-        resolve({
+        return resolve({
           status: 'success',
           value: {
             square_list: square_list,
@@ -81,13 +82,12 @@ export async function calcBruteForce(matriks_cost, matriks_vogels){
             new_cost: new_optimum_cost
           }
         });
-
       }
 
       // jika tidak ada yang optimum, tetap dikembalikan hasilnya untuk ditampilkan hasil square dan L nya
       // untuk memvalidadsi bahwa hasil perhitungan yg sebelumnya (entah bruteforce atau vogel) masih yang terbaik
       // ini dikembalikan hanya untuk memperlihatkan pola L dan Square yang ditemukan tidak memberikan different cost value yang minus
-      resolve({
+      return resolve({
         status: 'success',
         value: {
           square_list: square_list,
@@ -98,8 +98,20 @@ export async function calcBruteForce(matriks_cost, matriks_vogels){
       });
       
     }
+
+    // jika tidak ditemukan square dan L, tetap dikembalikan untuk menunjukkan di web bahwa tidak ditemukan square dan L
+    return resolve({
+      status: 'success',
+      value: {
+        square_list: [],
+        diff_cost_temp: 0,
+        new_vogels: matriks_vogels,
+        new_cost: countTheVogelCost(matriks_cost, matriks_vogels)
+      }
+    });
+
     
-    resolve(false)
+    return resolve(false)
 
 
   });

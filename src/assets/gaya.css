@@ -29,6 +29,17 @@
 
 .opsiMatriks{
   width:100%;
-  max-width: 700px;
+  max-width: 930px;
   margin: 0 auto;
 }
+
+.dialogResult{
+  width: 100%;
+  max-width: 700px;
+}
+
+.dialogHapus{
+  width: 100%;
+  max-width: 400px;
+}
+
