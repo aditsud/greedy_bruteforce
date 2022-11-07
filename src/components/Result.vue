@@ -140,7 +140,7 @@ export default{
           for(let i=0; i<square_list.length; i++){
             let square = square_list[i].square;
             let variasi_x = getRandomFloat(0, 50, 2); // agar garis tidak berdempetan, jadi digeser dikit
-            let variasi_y = getRandomFloat(-10, 10, 2);; // agar garis tidak berdempetan, jadi digeser dikit
+            let variasi_y = getRandomFloat(-15, -10, 2);; // agar garis tidak berdempetan, jadi digeser dikit
             let color = generateRandomColorHex();
             for(let j=0; j<square.length; j++){
               if(j===square.length-1){ // membuat garis terakhir dengan garis pertama
@@ -157,7 +157,7 @@ export default{
             for(let i=0; i<square_list.length; i++){
               let square = square_list[i].square;
               let variasi_x = getRandomFloat(0, 50, 2); // agar garis tidak berdempetan, jadi digeser dikit
-              let variasi_y = getRandomFloat(-10, 10, 2);; // agar garis tidak berdempetan, jadi digeser dikit
+              let variasi_y = getRandomFloat(-15, -10, 2);; // agar garis tidak berdempetan, jadi digeser dikit
               let color = generateRandomColorHex();
               for(let j=0; j<square.length; j++){
                 if(j===square.length-1){ // membuat garis terakhir dengan garis pertama

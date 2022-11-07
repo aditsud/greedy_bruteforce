@@ -15,6 +15,7 @@ Untuk Tugas Besar Matematika Lanjut
 - [Sedikit Informasi Tentang Web Frontendnya](#sedikit-informasi-tentang-web-frontendnya)
 - [Dokumen Flowchart](#dokumen-flowchart)
 - [Kompleksitas Algoritma](#kompleksitas-algoritma)
+- [Pedoman Penggunaan Aplikasi](#pedoman-penggunaan-aplikasi)
 - [Screenshot Aplikasi](#screenshot-aplikasi)
   * [Beranda](#beranda)
   * [Vogels Approximation](#vogels-approximation)
@@ -74,6 +75,9 @@ _Segera Menyusul_
 
 #### Kompleksitas Algoritma
 _Segera Menyusul_
+
+#### Pedoman Penggunaan Aplikasi
+https://github.com/aditsud/greedy_bruteforce/blob/main/public/panduan.pdf
 
 #### Screenshot Aplikasi
 

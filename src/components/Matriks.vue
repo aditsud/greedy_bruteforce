@@ -63,6 +63,17 @@
             Save Matriks
           </v-btn>
         </div>
+        <div class="float-left">
+          <v-btn 
+            color="purple" 
+            style="margin-top:10px" 
+            variant="text" 
+            @click="dialogBantuan = true"
+            prepend-icon="fa-solid fa-circle-question"
+          >
+            Bantuan
+          </v-btn>
+        </div>
       </v-col>
     </v-row>
     <v-row>
@@ -183,6 +194,67 @@
     </v-card>
     
   </v-dialog>
+  <v-dialog v-model="dialogBantuan" transition="dialog-bottom-transition" fullscreen scrollable >
+    <v-card>
+      <v-card-title class="pa-0" >
+        <v-toolbar flat style="background-color: #555555 !important">
+          <v-toolbar-title>
+            <div class="app-header">
+            <template v-if="isLoadingPdf">
+              Sedang Memuat PDF...
+            </template>
+
+            <template v-else>
+              <span v-if="showAllPages">
+                {{ pageCount }} Halaman
+              </span>
+
+              <span v-else>
+                <button :disabled="page <= 1" @click="page--">❮</button>
+
+                {{ page }} / {{ pageCount }}
+
+                <button :disabled="page >= pageCount" @click="page++">❯</button>
+              </span>
+
+              <label class="right">
+                <input v-model="showAllPages" type="checkbox">
+
+                Tunjukkan Semua Halaman
+              </label>
+            </template>
+          </div>
+          </v-toolbar-title>
+        </v-toolbar>
+      </v-card-title>
+      <v-card-text style="background-color: #ccc;">
+        
+        <p class="text-justify text-body-2 mb-2">
+          
+
+          <div class="app-content">
+            <vue-pdf-embed
+              ref="pdfRef"
+              :source="pdfSource"
+              :page="page"
+              @rendered="handleDocumentRender"
+            />
+          </div>
+        </p>
+      </v-card-text>
+      <v-card-actions style="background-color: #555555 !important">
+        <v-spacer></v-spacer>
+        <v-btn
+          color="white"
+          flat
+          @click="dialogBantuan=false"
+        >
+          tutup
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+    
+  </v-dialog>
 </template>
 
 <script>
@@ -195,14 +267,32 @@ import LoadMatriks from './LoadMatriks.vue';
 import { useToast } from "vue-toastification";
 import dayjs from 'dayjs';
 import 'dayjs/locale/id';
+import VuePdfEmbed from 'vue-pdf-embed'
 
 
   export default{
     components:{
       Result,
-      LoadMatriks
+      LoadMatriks,
+      VuePdfEmbed
     },
     setup(){
+      
+      const isLoadingPdf = ref(true);
+      const page = ref(null)
+      const pageCount = ref(1)
+      const pdfSource = ref("./panduan.pdf")
+      const pdfRef = ref(null)
+      const showAllPages = ref(true)
+      watch(showAllPages, ()=>{
+        page.value = showAllPages.value ? null : 1
+      })
+      const handleDocumentRender = () =>{
+        isLoadingPdf.value = false
+        pageCount.value = pdfRef.value.pageCount
+      }
+
+    
       const emitter = inject('emitter');
       const baris = ref(4)
       const kolom = ref(4)
@@ -233,6 +323,9 @@ import 'dayjs/locale/id';
           toast("Matriks berhasil dimuat")
         },500)
       })
+
+      const dialogBantuan = ref(false);
+
       const dialogLoadMatriks = ref(false);
       const dialogSave = ref(false);
       const namaMatriks = ref('');
@@ -469,7 +562,15 @@ import 'dayjs/locale/id';
         saveMatriksDialog,
         dialogSave,
         namaMatriks,
-        simpanMatriks
+        simpanMatriks,
+        dialogBantuan,
+        isLoadingPdf,
+        page,
+        pageCount,
+        pdfSource,
+        showAllPages,
+        handleDocumentRender,
+        pdfRef
       }
     }
   }
@@ -477,4 +578,26 @@ import 'dayjs/locale/id';
 
 <style scoped>
 @import '../assets/gaya.css';
+</style>
+
+<style scoped>
+.vue-pdf-embed:deep(div) {
+  margin-bottom: 8px;
+  box-shadow: 0 2px 8px 4px rgba(0, 0, 0, 0.1);
+}
+
+.app-header {
+  padding: 16px;
+  box-shadow: 0 2px 8px 4px rgba(0, 0, 0, 0.1);
+  background-color: #555;
+  color: #ddd;
+}
+
+.app-content {
+  padding: 24px 16px;
+}
+
+.right {
+  float: right;
+}
 </style>
