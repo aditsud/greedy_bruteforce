@@ -77,7 +77,7 @@ _Segera Menyusul_
 _Segera Menyusul_
 
 #### Pedoman Penggunaan Aplikasi
-https://github.com/aditsud/greedy_bruteforce/blob/main/public/panduan.pdf
+https://github.com/aditsud/greedy_bruteforce/raw/main/public/panduan.pdf
 
 #### Screenshot Aplikasi
 
