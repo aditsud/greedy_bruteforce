@@ -13,8 +13,7 @@ Untuk Tugas Besar Matematika Lanjut
 - [Tools yang Dipakai](#tools-yang-dipakai)
 - [Lokasi Kodingan Inti](#lokasi-kodingan-inti)
 - [Sedikit Informasi Tentang Web Frontendnya](#sedikit-informasi-tentang-web-frontendnya)
-- [Dokumen Flowchart](#dokumen-flowchart)
-- [Kompleksitas Algoritma](#kompleksitas-algoritma)
+- [Kompleksitas Algoritma dan Flowchart](#kompleksitas-algoritma)
 - [Pedoman Penggunaan Aplikasi](#pedoman-penggunaan-aplikasi)
 - [Screenshot Aplikasi](#screenshot-aplikasi)
   * [Beranda](#beranda)
@@ -70,11 +69,8 @@ hasil_bruteforce.value = result.value.bruteforce_result;
 dialog.value = true;
 ```
 
-#### Dokumen Flowchart
-_Segera Menyusul_
-
-#### Kompleksitas Algoritma
-_Segera Menyusul_
+#### Kompleksitas Algoritma dan Flowchart
+https://github.com/aditsud/greedy_bruteforce/raw/main/analisis_kompleksitas.pdf
 
 #### Pedoman Penggunaan Aplikasi
 https://github.com/aditsud/greedy_bruteforce/raw/main/public/panduan.pdf
