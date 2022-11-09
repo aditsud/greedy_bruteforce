@@ -1,4 +1,5 @@
 <template>
+  <Snowflakes></Snowflakes>
   <v-container>
     <v-row class="text-center mt-0 opsiMatriks">
       <v-col cols="12">
@@ -268,13 +269,15 @@ import { useToast } from "vue-toastification";
 import dayjs from 'dayjs';
 import 'dayjs/locale/id';
 import VuePdfEmbed from 'vue-pdf-embed'
+import Snowflakes from './Snowflakes.vue'
 
 
   export default{
     components:{
       Result,
       LoadMatriks,
-      VuePdfEmbed
+      VuePdfEmbed,
+      Snowflakes
     },
     setup(){
       
